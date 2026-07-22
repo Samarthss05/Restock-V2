@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+:root {
+  --color-sage: #597e66;
+  --color-sage-dark: #375d49;
+  --color-app-bg: #f7f8f7;
+  --color-app-fg: #1f2a24;
+  --color-gold: #d4a017;
+  --color-destructive: #c65a5a;
+
+  --color-sage-50: #eef3f0;
+  --color-sage-100: #dce8e0;
+  --color-sage-200: #b9d1c1;
+  --color-sage-muted: #f0f4f1;
+
+  --radius-card: 1.15rem;
+  --radius-pill: 999px;
+
+  --font-app-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-app-mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+@theme inline {
+  --color-background: var(--color-app-bg);
+  --color-foreground: var(--color-app-fg);
+  --color-sage: var(--color-sage);
+  --color-sage-dark: var(--color-sage-dark);
+  --color-app-bg: var(--color-app-bg);
+  --color-app-fg: var(--color-app-fg);
+  --color-gold: var(--color-gold);
+  --color-destructive: var(--color-destructive);
+  --color-sage-50: var(--color-sage-50);
+  --color-sage-100: var(--color-sage-100);
+  --color-sage-200: var(--color-sage-200);
+  --color-sage-muted: var(--color-sage-muted);
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+  --font-sans: var(--font-app-sans);
+  --font-mono: var(--font-app-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #e7e9e6;
+  color: var(--color-app-fg);
+  font-family: var(--font-app-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Device viewport: full-bleed on real phones, framed mockup on wider screens */
+.device-viewport {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.device-frame {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  background: var(--color-app-bg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 560px) {
+  .device-viewport {
+    padding: 2.5rem 1rem;
+  }
+  .device-frame {
+    width: 393px;
+    height: 852px;
+    border-radius: 54px;
+    border: 10px solid #0b0c0d;
+    box-shadow:
+      0 30px 60px -20px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.ai-gradient-text {
+  background: linear-gradient(90deg, #597e66 0%, #7fa587 45%, #d4a017 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ai-gradient-surface {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(212, 160, 23, 0.16) 0%, rgba(212, 160, 23, 0) 55%),
+    radial-gradient(120% 140% at 100% 0%, rgba(89, 126, 102, 0.22) 0%, rgba(89, 126, 102, 0) 60%),
+    linear-gradient(180deg, #eef3ef 0%, #e7efe9 100%);
+}
+
+.ai-gradient-icon {
+  background: linear-gradient(135deg, #597e66 0%, #375d49 60%, #d4a017 130%);
+}
+
+.vault-card {
+  background: linear-gradient(160deg, #23352a 0%, #1a2620 100%);
+  color: #f2f5f2;
+}
