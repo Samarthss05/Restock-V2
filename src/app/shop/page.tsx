@@ -22,7 +22,7 @@ export default function ShopHomePage() {
     <Screen bottomBar={<TabBar variant="shop" />}>
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl grad-sage">
+          <div className="icon-tile flex h-8 w-8 items-center justify-center grad-sage">
             <Sprout size={16} className="text-white" />
           </div>
           <span className="text-[15px] font-bold tracking-tight text-app-fg">ReStock</span>

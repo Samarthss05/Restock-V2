@@ -176,7 +176,7 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
         <div className="mt-4">
           <Card>
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-dark">
+              <div className="icon-tile flex h-10 w-10 shrink-0 items-center justify-center bg-sage-100 text-sage-dark">
                 <TruckIcon size={18} />
               </div>
               <div className="min-w-0 flex-1">

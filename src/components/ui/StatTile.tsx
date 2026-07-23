@@ -26,7 +26,7 @@ export function StatTile({
   return (
     <div className={`card-shadow rounded-card border border-black/[0.04] p-4 ${cardStyles[tint]}`}>
       <div
-        className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl shadow-sm ${tintStyles[tint]}`}
+        className={`icon-tile mb-3 flex h-9 w-9 items-center justify-center shadow-sm ${tintStyles[tint]}`}
       >
         <Icon size={16} strokeWidth={2.3} />
       </div>

@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sprout, Check } from "lucide-react";
-import { StatusBar } from "@/components/chrome/StatusBar";
-import { HomeIndicator } from "@/components/chrome/HomeIndicator";
 import { Button } from "@/components/ui/Button";
 import { useAppStore } from "@/lib/store";
 import { SHOP_PROFILE, SUPPLIER_PROFILE } from "@/lib/data";
@@ -27,10 +25,8 @@ export default function LoginPage() {
 
   return (
     <div className="vault-card relative flex h-full flex-col text-white">
-      <StatusBar light />
-
-      <div className="relative z-10 flex flex-col items-center px-8 pt-6">
-        <div className="ai-icon-frost flex h-14 w-14 items-center justify-center rounded-2xl">
+      <div className="relative z-10 flex flex-col items-center px-8 pt-10">
+        <div className="ai-icon-frost icon-tile flex h-14 w-14 items-center justify-center">
           <Sprout size={26} className="text-white" />
         </div>
         <div className="mt-3 text-[22px] font-bold tracking-tight">ReStock</div>
@@ -44,7 +40,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="relative z-10 mt-auto flex-1 rounded-t-[2rem] bg-app-bg px-5 pb-4 pt-6 text-app-fg shadow-[0_-20px_50px_-10px_rgba(0,0,0,0.35)]">
+      <div className="safe-bottom relative z-10 mt-auto flex-1 rounded-t-[2rem] bg-app-bg px-5 pt-6 text-app-fg shadow-[0_-20px_50px_-10px_rgba(0,0,0,0.35)]">
         <div className="flex flex-col gap-3">
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-black/50">Email</span>
@@ -92,7 +88,6 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-      <HomeIndicator />
     </div>
   );
 }

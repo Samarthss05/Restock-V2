@@ -10,8 +10,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
 };
 
@@ -24,8 +22,8 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="h-full font-sans">
         <AppStoreProvider>
-          <div className="device-viewport">
-            <div className="device-frame">{children}</div>
+          <div className="app-viewport">
+            <div className="app-shell">{children}</div>
           </div>
         </AppStoreProvider>
       </body>

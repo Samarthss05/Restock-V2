@@ -30,7 +30,7 @@ export function TabBar({ variant }: { variant: "shop" | "supplier" }) {
   const tabs = variant === "shop" ? SHOP_TABS : SUPPLIER_TABS;
 
   return (
-    <div className="sticky bottom-0 z-20 flex items-stretch justify-around border-t border-black/[0.06] bg-white/85 px-2 pb-1 pt-2 backdrop-blur-xl">
+    <div className="sticky bottom-0 z-20 flex items-stretch justify-around border-t border-black/[0.06] bg-white/85 px-2 pb-[max(0.25rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl">
       {tabs.map((tab) => {
         const active = pathname === tab.href;
         const Icon = tab.icon;

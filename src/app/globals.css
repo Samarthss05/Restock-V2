@@ -76,39 +76,46 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Device viewport: full-bleed on real phones, framed mockup on wider screens */
-.device-viewport {
+/* App shell: a real responsive webpage, edge-to-edge on phones. No fake
+   device chrome is drawn here — real browsers already show their own status
+   bar and home indicator, so we respect those via env(safe-area-inset-*)
+   instead of duplicating them. On wide screens it settles into a centered,
+   comfortably narrow column rather than pretending to be a physical phone. */
+.app-viewport {
   min-height: 100dvh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 0;
+  background: var(--color-app-bg);
 }
 
-.device-frame {
+.app-shell {
   position: relative;
   width: 100%;
+  max-width: 480px;
   height: 100dvh;
   background: var(--color-app-bg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-top: env(safe-area-inset-top);
 }
 
 @media (min-width: 560px) {
-  .device-viewport {
-    padding: 2.5rem 1rem;
+  .app-viewport {
+    background: #e2e4e0;
+    padding: 2rem 1rem;
   }
-  .device-frame {
-    width: 393px;
-    height: 852px;
-    border-radius: 54px;
-    border: 10px solid #0b0c0d;
+  .app-shell {
+    height: calc(100dvh - 4rem);
+    border-radius: 20px;
     box-shadow:
-      0 50px 100px -30px rgba(10, 15, 12, 0.55),
-      0 20px 40px -20px rgba(10, 15, 12, 0.4),
-      0 0 0 1px rgba(0, 0, 0, 0.08);
+      0 1px 1px rgba(0, 0, 0, 0.04),
+      0 24px 48px -20px rgba(20, 30, 24, 0.3);
   }
+}
+
+.safe-bottom {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -226,4 +233,12 @@ body {
 
 .progress-grad {
   background: linear-gradient(90deg, #5b7fb5 0%, #24406b 100%);
+}
+
+/* Apple-style "squircle" icon tile: one consistent shape for every feature
+   icon square (logo marks, stat icons, list-row icons, AI icons), regardless
+   of the tile's size — percentage radius scales proportionally instead of a
+   fixed px value looking subtly different at each size. */
+.icon-tile {
+  border-radius: 26%;
 }

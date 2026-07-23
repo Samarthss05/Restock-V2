@@ -69,7 +69,7 @@ export function AssistantChat({
     >
       {messages.length === 0 ? (
         <div className="flex flex-col items-center pt-10 text-center">
-          <div className="ai-gradient-icon flex h-12 w-12 items-center justify-center rounded-2xl">
+          <div className="ai-gradient-icon icon-tile flex h-12 w-12 items-center justify-center">
             <Sparkles size={20} className="text-white" />
           </div>
           <p className="mt-3 text-[14px] leading-relaxed text-black/50">
@@ -80,7 +80,7 @@ export function AssistantChat({
               <button
                 key={p}
                 onClick={() => handleSend(p)}
-                className="press rounded-2xl border border-black/10 bg-white px-4 py-3 text-left text-[13.5px] font-medium text-app-fg shadow-sm"
+                className="press rounded-pill border border-black/10 bg-white px-4 py-3 text-left text-[13.5px] font-medium text-app-fg shadow-sm"
               >
                 {p}
               </button>

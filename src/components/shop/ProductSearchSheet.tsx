@@ -2,8 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { Search, X, Check, Package } from "lucide-react";
-import { StatusBar } from "@/components/chrome/StatusBar";
-import { HomeIndicator } from "@/components/chrome/HomeIndicator";
 import { Chip } from "@/components/ui/Chip";
 import { Button } from "@/components/ui/Button";
 import { CATALOG, SUGGESTED_PRODUCT_IDS, findProduct } from "@/lib/data";
@@ -82,8 +80,7 @@ export function ProductSearchSheet(props: Props) {
   }
 
   return (
-    <div className="absolute inset-0 z-40 flex flex-col bg-app-bg">
-      <StatusBar />
+    <div className="absolute inset-0 z-40 flex flex-col bg-app-bg" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-black/[0.06] px-4">
         <button onClick={props.onCancel} className="text-[15px] text-sage-dark active:opacity-60">
           Cancel
@@ -102,7 +99,7 @@ export function ProductSearchSheet(props: Props) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar px-4 pb-8 pt-4">
+      <div className="flex-1 overflow-y-auto no-scrollbar px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-4">
         <div className="relative mb-4">
           <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-black/35" />
           <input
@@ -144,7 +141,7 @@ export function ProductSearchSheet(props: Props) {
                 onClick={() => toggle(p)}
                 className="flex w-full items-center gap-3 py-3 text-left active:opacity-70"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-dark">
+                <div className="icon-tile flex h-10 w-10 shrink-0 items-center justify-center bg-sage-100 text-sage-dark">
                   <Package size={18} strokeWidth={2} />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -221,7 +218,6 @@ export function ProductSearchSheet(props: Props) {
           )}
         </div>
       </div>
-      <HomeIndicator />
     </div>
   );
 }

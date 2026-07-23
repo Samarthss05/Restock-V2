@@ -35,7 +35,7 @@ export function ListRow({
     >
       {Icon && (
         <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-sm ${tintStyles[iconTint]}`}
+          className={`icon-tile flex h-10 w-10 shrink-0 items-center justify-center shadow-sm ${tintStyles[iconTint]}`}
         >
           <Icon size={17} strokeWidth={2} />
         </div>

@@ -195,7 +195,7 @@ function CreateRfqInner() {
           </div>
           <button
             onClick={() => setSearchState({ open: true, mode: "add" })}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-black/15 py-3 text-[13.5px] font-medium text-sage-dark active:opacity-60"
+            className="press mt-3 flex w-full items-center justify-center gap-2 rounded-pill border border-dashed border-black/15 py-3 text-[13.5px] font-medium text-sage-dark"
           >
             <Plus size={15} />
             Search products to add
@@ -215,7 +215,7 @@ function CreateRfqInner() {
           <button
             onClick={handleParse}
             disabled={!importText.trim()}
-            className="grad-sage-glossy mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-button)] active:scale-[0.98] disabled:opacity-40"
+            className="press grad-sage-glossy mt-3 flex w-full items-center justify-center gap-2 rounded-pill py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-button)] disabled:opacity-40"
           >
             <Sparkles size={15} />
             Parse with AI
@@ -270,7 +270,7 @@ function CreateRfqInner() {
               onClick={() => fileInputRef.current?.click()}
               className="press flex w-full flex-col items-center justify-center gap-2 rounded-hero border border-dashed border-black/15 bg-white py-10 text-center"
             >
-              <span className="ai-gradient-icon flex h-12 w-12 items-center justify-center rounded-2xl">
+              <span className="ai-gradient-icon icon-tile flex h-12 w-12 items-center justify-center">
                 <Camera size={20} className="text-white" />
               </span>
               <span className="mt-1 text-[14px] font-semibold text-app-fg">

@@ -33,7 +33,7 @@ export function GradientAICard({
         onClick={onAsk}
         className="press mt-5 flex w-full items-center gap-3 rounded-2xl bg-white/[0.08] p-3 text-left ring-1 ring-inset ring-white/10 backdrop-blur"
       >
-        <div className="ai-icon-frost flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
+        <div className="ai-icon-frost icon-tile flex h-9 w-9 shrink-0 items-center justify-center">
           <Sparkles size={16} className="text-white" />
         </div>
         <div className="min-w-0 flex-1">
