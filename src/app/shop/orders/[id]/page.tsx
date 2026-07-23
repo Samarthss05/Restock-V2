@@ -2,7 +2,15 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, MapPin, Truck as TruckIcon, AlertCircle, Lock } from "lucide-react";
+import {
+  Check,
+  MapPin,
+  Truck as TruckIcon,
+  AlertCircle,
+  Lock,
+  Sparkles,
+  ShieldCheck,
+} from "lucide-react";
 import { Screen } from "@/components/chrome/Screen";
 import { TopNavBar } from "@/components/chrome/TopNavBar";
 import { Card } from "@/components/ui/Card";
@@ -11,7 +19,8 @@ import { StatusPill } from "@/components/ui/StatusPill";
 import { Button } from "@/components/ui/Button";
 import { useAppStore } from "@/lib/store";
 import { formatSGD } from "@/lib/format";
-import type { Order } from "@/lib/types";
+import { DISPUTE_OUTCOME_LABELS, DISPUTE_REASON_LABELS } from "@/lib/data";
+import type { DisputeReason, Order } from "@/lib/types";
 
 const STEPS = ["Placed", "Confirmed", "In Transit", "Delivered"];
 
@@ -23,9 +32,10 @@ function stepDoneIndex(order: Order) {
 export default function OrderTrackingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const { shopOrders } = useAppStore();
+  const { shopOrders, disputes, raiseDispute, acceptDisputeRecommendation, escalateDispute } =
+    useAppStore();
   const order = shopOrders.find((o) => o.id === id);
-  const [disputeSent, setDisputeSent] = useState(false);
+  const [flowStage, setFlowStage] = useState<"closed" | "reason" | "analyzing">("closed");
 
   if (!order) {
     return (
@@ -37,6 +47,14 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
 
   const doneIndex = stepDoneIndex(order);
   const itemsSubtotal = order.items.reduce((sum, it) => sum + it.price, 0);
+  const dispute = disputes[order.id];
+
+  function selectReason(reason: DisputeReason) {
+    setFlowStage("analyzing");
+    window.setTimeout(() => {
+      raiseDispute(order!.id, reason);
+    }, 1300);
+  }
 
   const paymentStatus =
     order.status === "delivered"
@@ -186,23 +204,109 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
         </div>
       )}
 
-      <div className="mt-4">
-        <Card>
-          <div className="text-[14px] font-semibold text-app-fg">Problem with this delivery?</div>
-          <p className="mt-1 text-[12.5px] leading-relaxed text-black/50">
-            Ledger mediates rejected or partial deliveries with a replacement or refund.
-          </p>
-          {disputeSent ? (
-            <p className="mt-3 text-[13px] font-medium text-sage-dark">
-              Dispute sent — Ledger will follow up within 24 hours.
+      {order.status !== "cancelled" && !dispute && (
+        <div className="mt-4">
+          <Card>
+            <div className="text-[14px] font-semibold text-app-fg">Problem with this delivery?</div>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-black/50">
+              Ledger mediates rejected or partial deliveries with a replacement or refund.
             </p>
-          ) : (
-            <Button variant="secondary" className="mt-3" onClick={() => setDisputeSent(true)}>
-              Raise a dispute
-            </Button>
-          )}
-        </Card>
-      </div>
+
+            {flowStage === "closed" && (
+              <Button variant="secondary" className="mt-3" onClick={() => setFlowStage("reason")}>
+                Raise a dispute
+              </Button>
+            )}
+
+            {flowStage === "reason" && (
+              <div className="mt-3">
+                <p className="mb-2 text-[12.5px] font-medium text-black/50">What happened?</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {(Object.keys(DISPUTE_REASON_LABELS) as DisputeReason[]).map((reason) => (
+                    <button
+                      key={reason}
+                      onClick={() => selectReason(reason)}
+                      className="press rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-left text-[12.5px] font-medium text-app-fg shadow-sm active:border-sage"
+                    >
+                      {DISPUTE_REASON_LABELS[reason]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {flowStage === "analyzing" && (
+              <div className="mt-3 flex items-center gap-2 rounded-2xl bg-black/[0.03] px-3.5 py-3 text-[12.5px] font-medium text-sage-dark">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sage opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-sage-dark" />
+                </span>
+                AI is reviewing your delivery details…
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
+
+      {dispute && dispute.status === "recommended" && (
+        <div className="mt-4">
+          <div className="ai-gradient-surface rounded-hero p-4">
+            <div className="relative z-10 mb-1.5 flex items-center gap-1.5">
+              <Sparkles size={13} className="text-gold-bright" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-bright">
+                AI recommendation
+              </span>
+            </div>
+            <div className="relative z-10 mb-2 flex items-center gap-2">
+              <span className="rounded-pill bg-white/15 px-2.5 py-1 text-[12px] font-bold text-white">
+                {DISPUTE_OUTCOME_LABELS[dispute.outcome]}
+                {dispute.amount > 0 ? ` · ${formatSGD(dispute.amount)}` : ""}
+              </span>
+            </div>
+            <p className="relative z-10 text-[13px] leading-relaxed text-white/80">
+              {dispute.reasoning}
+            </p>
+            <div className="relative z-10 mt-4 flex flex-col gap-2">
+              <button
+                onClick={() => acceptDisputeRecommendation(order!.id)}
+                className="press flex w-full items-center justify-center gap-2 rounded-pill bg-white py-3 text-[14px] font-bold text-sage-deep shadow-[0_10px_20px_-8px_rgba(0,0,0,0.4)]"
+              >
+                Accept AI recommendation
+              </button>
+              <button
+                onClick={() => escalateDispute(order!.id)}
+                className="press flex w-full items-center justify-center gap-2 rounded-pill bg-white/10 py-3 text-[13.5px] font-semibold text-white ring-1 ring-inset ring-white/15"
+              >
+                Talk to a Ledger agent instead
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {dispute && dispute.status === "accepted" && (
+        <div className="mt-4">
+          <Card className="flex items-start gap-2">
+            <ShieldCheck size={16} className="mt-0.5 shrink-0 text-sage-dark" />
+            <p className="text-[13px] leading-relaxed text-app-fg">
+              Resolved — {DISPUTE_OUTCOME_LABELS[dispute.outcome].toLowerCase()}
+              {dispute.amount > 0 ? ` of ${formatSGD(dispute.amount)}` : ""} confirmed. Ledger
+              will process this automatically.
+            </p>
+          </Card>
+        </div>
+      )}
+
+      {dispute && dispute.status === "escalated" && (
+        <div className="mt-4">
+          <Card className="flex items-start gap-2">
+            <ShieldCheck size={16} className="mt-0.5 shrink-0 text-sage-dark" />
+            <p className="text-[13px] leading-relaxed text-app-fg">
+              A Ledger agent will review this dispute directly and follow up within 24 hours.
+            </p>
+          </Card>
+        </div>
+      )}
     </Screen>
   );
 }

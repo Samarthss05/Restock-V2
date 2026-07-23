@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Sparkles, Plus } from "lucide-react";
+import { Sparkles, Plus, Camera, RotateCcw } from "lucide-react";
 import { Screen } from "@/components/chrome/Screen";
 import { TopNavBar } from "@/components/chrome/TopNavBar";
 import { StickyFooter } from "@/components/chrome/StickyFooter";
@@ -12,10 +12,12 @@ import { Tag } from "@/components/ui/Chip";
 import { RfqItemRow } from "@/components/shop/RfqItemRow";
 import { ProductSearchSheet } from "@/components/shop/ProductSearchSheet";
 import { useAppStore } from "@/lib/store";
-import { nextId, SHOP_PROFILE } from "@/lib/data";
+import { nextId, SHOP_PROFILE, mockScanShelfPhoto } from "@/lib/data";
 import { parseImportedText } from "@/lib/parse";
 import { moderateText } from "@/lib/moderation";
 import type { Product, Rfq, RfqItem, Unit } from "@/lib/types";
+
+type Mode = "manual" | "import" | "photo";
 
 function CreateRfqInner() {
   const router = useRouter();
@@ -24,7 +26,7 @@ function CreateRfqInner() {
   const { rfqs, addRfq, upsertDraftRfq } = useAppStore();
   const existingDraft = draftId ? rfqs.find((r) => r.id === draftId) : undefined;
 
-  const [mode, setMode] = useState<"manual" | "import">("manual");
+  const [mode, setMode] = useState<Mode>("manual");
   const [deliveryAddress, setDeliveryAddress] = useState(
     existingDraft?.deliveryAddress ?? "12 Tanjong Pagar Rd, #01-04"
   );
@@ -38,6 +40,11 @@ function CreateRfqInner() {
   const [notes, setNotes] = useState(existingDraft?.notes ?? "");
   const [importText, setImportText] = useState("");
   const [parsedConfidence, setParsedConfidence] = useState<number | null>(null);
+
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
+  const [scanConfidence, setScanConfidence] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [searchState, setSearchState] = useState<
     { open: false } | { open: true; mode: "add" } | { open: true; mode: "replace"; itemId: string }
@@ -69,6 +76,26 @@ function CreateRfqInner() {
     setParsedConfidence(confidence);
   }
 
+  function handlePhotoSelected(file: File) {
+    setPhotoUrl(URL.createObjectURL(file));
+    setScanning(true);
+    setScanConfidence(null);
+    window.setTimeout(() => {
+      const result = mockScanShelfPhoto();
+      setItems(result.items);
+      setScanConfidence(result.confidence);
+      setScanning(false);
+    }, 1400);
+  }
+
+  function resetPhoto() {
+    setPhotoUrl(null);
+    setScanning(false);
+    setScanConfidence(null);
+    setItems([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
   function buildRfq(status: Rfq["status"]): Rfq {
     return {
       id: existingDraft?.id ?? nextId("rfq"),
@@ -80,7 +107,7 @@ function CreateRfqInner() {
       items,
       notes,
       status,
-      createdVia: mode === "import" ? "import_chat" : "manual",
+      createdVia: mode === "import" ? "import_chat" : mode === "photo" ? "photo" : "manual",
       deadlineMinutesFromCreation: 240,
       createdAt: existingDraft?.createdAt ?? Date.now(),
       bidsCount: 0,
@@ -122,6 +149,7 @@ function CreateRfqInner() {
         options={[
           { value: "manual", label: "Manual" },
           { value: "import", label: "Import chat" },
+          { value: "photo", label: "Photo" },
         ]}
       />
 
@@ -144,7 +172,7 @@ function CreateRfqInner() {
         </label>
       </div>
 
-      {mode === "manual" ? (
+      {mode === "manual" && (
         <div className="mt-5">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-[13px] font-semibold text-app-fg">Items</span>
@@ -173,7 +201,9 @@ function CreateRfqInner() {
             Search products to add
           </button>
         </div>
-      ) : (
+      )}
+
+      {mode === "import" && (
         <div className="mt-5">
           <textarea
             value={importText}
@@ -217,6 +247,93 @@ function CreateRfqInner() {
                   />
                 ))}
               </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {mode === "photo" && (
+        <div className="mt-5">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handlePhotoSelected(file);
+            }}
+          />
+
+          {!photoUrl && (
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="press flex w-full flex-col items-center justify-center gap-2 rounded-hero border border-dashed border-black/15 bg-white py-10 text-center"
+            >
+              <span className="ai-gradient-icon flex h-12 w-12 items-center justify-center rounded-2xl">
+                <Camera size={20} className="text-white" />
+              </span>
+              <span className="mt-1 text-[14px] font-semibold text-app-fg">
+                Take a photo of your shelf
+              </span>
+              <span className="text-[12px] text-black/45">or choose one from your library</span>
+            </button>
+          )}
+
+          {photoUrl && (
+            <div className="overflow-hidden rounded-hero">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={photoUrl} alt="Shelf photo" className="h-44 w-full object-cover" />
+            </div>
+          )}
+
+          {photoUrl && (
+            <p className="mt-3 text-[12px] leading-relaxed text-black/45">
+              Photos are analyzed for this preview only — they&apos;re never shared with a
+              supplier.
+            </p>
+          )}
+
+          {scanning && (
+            <div className="mt-4 flex items-center gap-2 rounded-2xl bg-black/[0.03] px-3.5 py-3 text-[12.5px] font-medium text-sage-dark">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sage opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-sage-dark" />
+              </span>
+              Scanning shelf with AI…
+            </div>
+          )}
+
+          {scanConfidence !== null && !scanning && (
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-[13px] font-semibold text-app-fg">
+                  Detected low stock · review before continuing
+                </span>
+                <Tag>{scanConfidence}% confidence</Tag>
+              </div>
+              <div className="flex flex-col gap-2">
+                {items.map((item) => (
+                  <RfqItemRow
+                    key={item.id}
+                    item={item}
+                    onChangeQuantity={(q) =>
+                      setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, quantity: q } : it)))
+                    }
+                    onChangeUnit={(u: Unit) =>
+                      setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, unit: u } : it)))
+                    }
+                    onDelete={() => setItems((prev) => prev.filter((it) => it.id !== item.id))}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={resetPhoto}
+                className="mt-3 flex items-center gap-1.5 text-[12.5px] font-medium text-sage-dark active:opacity-60"
+              >
+                <RotateCcw size={13} />
+                Retake photo
+              </button>
             </div>
           )}
         </div>

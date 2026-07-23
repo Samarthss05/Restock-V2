@@ -41,7 +41,7 @@ export default function ShopHomePage() {
         name={SHOP_PROFILE.name}
         subtext="You usually restock cage-free eggs every 6 days — it's been 5. Want a head start?"
         prompt="Reorder my usual vegetables"
-        onAsk={() => router.push("/shop/new")}
+        onAsk={() => router.push("/shop/assistant?q=" + encodeURIComponent("Reorder my usual vegetables"))}
       />
 
       <div className="mt-5 grid grid-cols-2 gap-3">

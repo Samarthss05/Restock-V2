@@ -1,5 +1,7 @@
 import type {
   Bid,
+  Dispute,
+  DisputeReason,
   Order,
   OrderItem,
   Product,
@@ -8,6 +10,7 @@ import type {
   SupplierRfqInboxEntry,
   Unit,
 } from "./types";
+import { formatSGD } from "./format";
 
 export const SHOP_PROFILE = {
   name: "Tanjong Fresh Mart",
@@ -141,6 +144,7 @@ export const BIDS_BY_RFQ: Record<string, Bid[]> = {
       deliveryISO: "",
       tags: ["Lowest price"],
       note: "Eggs unavailable — substitute offered.",
+      substitution: { from: "Cage-free eggs", to: "Barn-laid eggs" },
       rating: 4.6,
       reviewCount: 74,
     },
@@ -477,3 +481,135 @@ export const INBOX_META: Record<string, { deliverToArea: string }> = {
   "rfq-bakery": { deliverToArea: "Toa Payoh" },
   "rfq-cleaning-expired": { deliverToArea: "Jurong East" },
 };
+
+// ---------------------------------------------------------------------------
+// AI feature support: substitution, dispute recommendations, photo scan,
+// supplier win-likelihood ranking, and the conversational assistant.
+// ---------------------------------------------------------------------------
+
+export const SUBSTITUTES: Record<string, { name: string; unit: Unit; note: string }> = {
+  "Cage-free eggs": {
+    name: "Barn-laid eggs",
+    unit: "carton",
+    note: "Same pack size, typically 8% cheaper",
+  },
+  "Mixed leafy greens": {
+    name: "Kai lan (Chinese kale)",
+    unit: "kg",
+    note: "Comparable leafy green, in stock now",
+  },
+  "Full cream milk 1L": {
+    name: "UHT full cream milk 1L",
+    unit: "carton",
+    note: "Longer shelf life, same volume",
+  },
+  "Jasmine rice 5kg": {
+    name: "Fragrant rice 5kg",
+    unit: "bag",
+    note: "Similar grade, next-day stock",
+  },
+  "Cavendish bananas": {
+    name: "Pisang Awak bananas",
+    unit: "kg",
+    note: "Local variety, ready now",
+  },
+  "Cooking oil 5L": {
+    name: "Vegetable oil 5L",
+    unit: "bottle",
+    note: "Same volume, neutral flavour",
+  },
+  "Kopi-O sachets": {
+    name: "Kopi-C sachets",
+    unit: "pack",
+    note: "Same brand line, in stock",
+  },
+  "Cardboard cartons": {
+    name: "Recycled cardboard cartons",
+    unit: "pcs",
+    note: "Same size, eco-grade stock",
+  },
+};
+
+export const DISPUTE_REASON_LABELS: Record<DisputeReason, string> = {
+  missing_item: "Item missing from delivery",
+  late_delivery: "Delivery arrived late",
+  damaged: "Item arrived damaged",
+  wrong_item: "Received the wrong item",
+};
+
+export const DISPUTE_OUTCOME_LABELS: Record<"refund" | "partial_refund" | "replacement", string> = {
+  refund: "Full refund",
+  partial_refund: "Partial refund",
+  replacement: "Replacement",
+};
+
+export function computeAiDisputeRecommendation(
+  order: Order,
+  reason: DisputeReason
+): Pick<Dispute, "outcome" | "amount" | "reasoning"> {
+  const affected = order.items[0];
+
+  if (reason === "missing_item") {
+    return {
+      outcome: "partial_refund",
+      amount: affected.price,
+      reasoning: `Delivery confirmation shows ${affected.name} wasn't scanned at drop-off. The rest of the order matches your RFQ, so we recommend refunding just the missing line — ${formatSGD(affected.price)} — rather than the full order.`,
+    };
+  }
+  if (reason === "wrong_item") {
+    return {
+      outcome: "partial_refund",
+      amount: affected.price,
+      reasoning: `You reported ${affected.name} was swapped for something else. Since the rest of the order matches, we recommend a partial refund of ${formatSGD(affected.price)} for that line — the supplier keeps their fill-rate score for the remaining items.`,
+    };
+  }
+  if (reason === "damaged") {
+    return {
+      outcome: "replacement",
+      amount: 0,
+      reasoning: `Damage claims on a ${order.supplierId} order with no prior disputes are usually packaging-related rather than a stock issue, so a reshipped replacement is faster than a refund. Ledger will hold the supplier's payout until the replacement is confirmed delivered.`,
+    };
+  }
+  const goodwill = Math.max(5, Math.round(order.platformFee * 100) / 100);
+  return {
+    outcome: "partial_refund",
+    amount: goodwill,
+    reasoning: `Your order was confirmed at ${order.confirmedAt ?? order.placedAt} against a promised window — late enough to affect your prep time. We recommend a ${formatSGD(goodwill)} goodwill credit rather than a full refund, since the order still arrived complete.`,
+  };
+}
+
+export function mockScanShelfPhoto(): { items: RfqItem[]; confidence: number } {
+  return {
+    items: [
+      { id: `scan-1-${Date.now()}`, name: "Cage-free eggs", quantity: 10, unit: "carton", aiMatched: true, confidence: 0.93 },
+      { id: `scan-2-${Date.now()}`, name: "Full cream milk 1L", quantity: 8, unit: "carton", aiMatched: true, confidence: 0.9 },
+      { id: `scan-3-${Date.now()}`, name: "Cavendish bananas", quantity: 12, unit: "kg", aiMatched: true, confidence: 0.88 },
+    ],
+    confidence: 90,
+  };
+}
+
+export const SUPPLIER_WIN_INSIGHTS: Record<string, { score: number; reason: string }> = {
+  "rfq-veg": {
+    score: 92,
+    reason: "Strong fit — matches your usual catalog and this shop reorders weekly.",
+  },
+  "rfq-bakery": {
+    score: 58,
+    reason: "Outside your usual categories — lower win odds unless priced aggressively.",
+  },
+};
+
+export function rankSupplierInbox<T extends { id: string; status: string }>(
+  entries: T[]
+): (T & { winScore: number; reason?: string; recommended: boolean })[] {
+  const scored = entries
+    .filter((e) => e.status === "open")
+    .map((e) => ({
+      ...e,
+      winScore: SUPPLIER_WIN_INSIGHTS[e.id]?.score ?? 50,
+      reason: SUPPLIER_WIN_INSIGHTS[e.id]?.reason,
+    }))
+    .sort((a, b) => b.winScore - a.winScore);
+  return scored.map((e, i) => ({ ...e, recommended: i === 0 }));
+}

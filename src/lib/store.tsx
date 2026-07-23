@@ -12,11 +12,14 @@ import {
   BIDS_BY_RFQ,
   INITIAL_RFQS,
   SHOP_ORDERS_SEED,
+  SUPPLIER_INBOX_SEED,
   SUPPLIER_ORDERS_SEED,
   buildOrderItemsFromRfqAndBid,
+  computeAiDisputeRecommendation,
   nextId,
 } from "./data";
-import type { Bid, Order, Rfq } from "./types";
+import { generateShopReply, generateSupplierReply } from "./assistant";
+import type { Bid, ChatMessage, Dispute, DisputeReason, Order, Rfq } from "./types";
 
 type AccountPrefs = {
   smartReorderAlerts: boolean;
@@ -40,6 +43,9 @@ type AppState = {
   supplierOrders: Order[];
   autoBid: AutoBidConfig;
   prefs: AccountPrefs;
+  disputes: Record<string, Dispute>;
+  shopChat: ChatMessage[];
+  supplierChat: ChatMessage[];
 };
 
 type AppActions = {
@@ -55,6 +61,11 @@ type AppActions = {
   advanceSupplierOrder: (orderId: string) => void;
   setSupplierOrderStep: (orderId: string, step: 0 | 1 | 2 | 3) => void;
   togglePref: (key: keyof AccountPrefs) => void;
+  raiseDispute: (orderId: string, reason: DisputeReason) => void;
+  acceptDisputeRecommendation: (orderId: string) => void;
+  escalateDispute: (orderId: string) => void;
+  sendShopMessage: (text: string) => void;
+  sendSupplierMessage: (text: string) => void;
 };
 
 const AppStoreContext = createContext<(AppState & AppActions) | null>(null);
@@ -77,6 +88,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     autoBidRules: true,
     demandForecastAlerts: true,
   });
+  const [disputes, setDisputes] = useState<Record<string, Dispute>>({});
+  const [shopChat, setShopChat] = useState<ChatMessage[]>([]);
+  const [supplierChat, setSupplierChat] = useState<ChatMessage[]>([]);
 
   const setRole = useCallback((r: Role) => setRoleState(r), []);
   const logout = useCallback(() => setRoleState(null), []);
@@ -186,6 +200,66 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setPrefs((prev) => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
+  const raiseDispute = useCallback(
+    (orderId: string, reason: DisputeReason) => {
+      const order = shopOrders.find((o) => o.id === orderId);
+      if (!order) return;
+      const rec = computeAiDisputeRecommendation(order, reason);
+      setDisputes((prev) => ({
+        ...prev,
+        [orderId]: { orderId, reason, status: "recommended", ...rec, createdAt: Date.now() },
+      }));
+    },
+    [shopOrders]
+  );
+
+  const acceptDisputeRecommendation = useCallback((orderId: string) => {
+    setDisputes((prev) =>
+      prev[orderId] ? { ...prev, [orderId]: { ...prev[orderId], status: "accepted" } } : prev
+    );
+  }, []);
+
+  const escalateDispute = useCallback((orderId: string) => {
+    setDisputes((prev) =>
+      prev[orderId] ? { ...prev, [orderId]: { ...prev[orderId], status: "escalated" } } : prev
+    );
+  }, []);
+
+  const sendShopMessage = useCallback(
+    (text: string) => {
+      const userMsg: ChatMessage = { id: nextId("msg"), role: "user", text, createdAt: Date.now() };
+      const reply = generateShopReply(text, { orders: shopOrders, rfqs });
+      const aiMsg: ChatMessage = {
+        id: nextId("msg"),
+        role: "assistant",
+        text: reply.text,
+        quickActions: reply.quickActions,
+        createdAt: Date.now(),
+      };
+      setShopChat((prev) => [...prev, userMsg, aiMsg]);
+    },
+    [shopOrders, rfqs]
+  );
+
+  const sendSupplierMessage = useCallback(
+    (text: string) => {
+      const userMsg: ChatMessage = { id: nextId("msg"), role: "user", text, createdAt: Date.now() };
+      const reply = generateSupplierReply(text, {
+        orders: supplierOrders,
+        inbox: SUPPLIER_INBOX_SEED,
+      });
+      const aiMsg: ChatMessage = {
+        id: nextId("msg"),
+        role: "assistant",
+        text: reply.text,
+        quickActions: reply.quickActions,
+        createdAt: Date.now(),
+      };
+      setSupplierChat((prev) => [...prev, userMsg, aiMsg]);
+    },
+    [supplierOrders]
+  );
+
   const value = useMemo(
     () => ({
       role,
@@ -195,6 +269,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       supplierOrders,
       autoBid,
       prefs,
+      disputes,
+      shopChat,
+      supplierChat,
       setRole,
       logout,
       addRfq,
@@ -207,6 +284,11 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       advanceSupplierOrder,
       setSupplierOrderStep,
       togglePref,
+      raiseDispute,
+      acceptDisputeRecommendation,
+      escalateDispute,
+      sendShopMessage,
+      sendSupplierMessage,
     }),
     [
       role,
@@ -216,6 +298,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       supplierOrders,
       autoBid,
       prefs,
+      disputes,
+      shopChat,
+      supplierChat,
       setRole,
       logout,
       addRfq,
@@ -228,6 +313,11 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       advanceSupplierOrder,
       setSupplierOrderStep,
       togglePref,
+      raiseDispute,
+      acceptDisputeRecommendation,
+      escalateDispute,
+      sendShopMessage,
+      sendSupplierMessage,
     ]
   );
 

@@ -2,7 +2,7 @@
 
 import { use, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, AlertTriangle } from "lucide-react";
+import { Sparkles, AlertTriangle, Repeat } from "lucide-react";
 import { Screen } from "@/components/chrome/Screen";
 import { TopNavBar } from "@/components/chrome/TopNavBar";
 import { StickyFooter } from "@/components/chrome/StickyFooter";
@@ -13,6 +13,7 @@ import { Tag } from "@/components/ui/Chip";
 import {
   INBOX_LINE_ITEMS,
   INBOX_META,
+  SUBSTITUTES,
   SUPPLIER_CURRENT_BEST_BID,
   SUPPLIER_INBOX_SEED,
 } from "@/lib/data";
@@ -28,6 +29,7 @@ type LineItem = {
   price: number;
   aiSuggestedPrice: number;
   unavailable: boolean;
+  substitutedFrom?: string;
 };
 
 export default function SubmitBidPage({ params }: { params: Promise<{ id: string }> }) {
@@ -64,6 +66,17 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
   function toggleUnavailable(itemId: string) {
     setLineItems((prev) =>
       prev.map((it) => (it.id === itemId ? { ...it, unavailable: !it.unavailable } : it))
+    );
+  }
+
+  function acceptSubstitute(itemId: string) {
+    setLineItems((prev) =>
+      prev.map((it) => {
+        if (it.id !== itemId) return it;
+        const sub = SUBSTITUTES[it.name];
+        if (!sub) return it;
+        return { ...it, name: sub.name, unit: sub.unit, unavailable: false, substitutedFrom: it.name };
+      })
     );
   }
 
@@ -161,13 +174,19 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
         <div className="mb-2 text-[13px] font-semibold text-app-fg">Line items</div>
         <div className="flex flex-col gap-2">
           {lineItems.map((it) => (
-            <Card key={it.id} className={it.unavailable ? "opacity-50" : undefined}>
+            <Card key={it.id} className={it.unavailable ? "opacity-60" : undefined}>
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[14px] font-medium text-app-fg">{it.name}</div>
                   <div className="text-[12px] text-black/45">
                     {it.quantity} {it.unit} · AI suggests {formatSGD(it.aiSuggestedPrice)}
                   </div>
+                  {it.substitutedFrom && (
+                    <div className="mt-1 inline-flex items-center gap-1 rounded-pill bg-gold/15 px-2 py-0.5 text-[10.5px] font-semibold text-[#8a6208]">
+                      <Repeat size={10} />
+                      Substituted from {it.substitutedFrom}
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-[13px] text-black/40">S$</span>
@@ -190,6 +209,22 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
                 />
                 Mark unavailable (N/A)
               </label>
+
+              {it.unavailable && SUBSTITUTES[it.name] && (
+                <div className="mt-2 flex items-center gap-2 rounded-xl bg-sage-muted p-2.5">
+                  <Sparkles size={13} className="shrink-0 text-sage-dark" />
+                  <div className="min-w-0 flex-1 text-[11.5px] leading-snug text-sage-dark">
+                    <span className="font-semibold">AI substitute:</span> {SUBSTITUTES[it.name].name}{" "}
+                    — {SUBSTITUTES[it.name].note}
+                  </div>
+                  <button
+                    onClick={() => acceptSubstitute(it.id)}
+                    className="press shrink-0 rounded-pill bg-sage-dark px-2.5 py-1.5 text-[11px] font-bold text-white"
+                  >
+                    Swap
+                  </button>
+                </div>
+              )}
             </Card>
           ))}
         </div>

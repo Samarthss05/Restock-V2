@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, ShieldCheck, Truck, Zap, Tag as TagIcon } from "lucide-react";
+import { Sparkles, ShieldCheck, Truck, Zap, Tag as TagIcon, Repeat } from "lucide-react";
 import { Screen } from "@/components/chrome/Screen";
 import { TopNavBar } from "@/components/chrome/TopNavBar";
 import { Card } from "@/components/ui/Card";
@@ -171,7 +171,14 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
               </div>
             )}
 
-            {bid.note && <p className="mt-2.5 text-[12px] italic text-black/50">&ldquo;{bid.note}&rdquo;</p>}
+            {bid.substitution ? (
+              <div className="mt-2.5 flex items-center gap-1.5 rounded-xl bg-gold/10 px-2.5 py-2 text-[11.5px] font-medium text-[#8a6208]">
+                <Repeat size={12} className="shrink-0" />
+                AI-matched substitute: {bid.substitution.from} → {bid.substitution.to}
+              </div>
+            ) : (
+              bid.note && <p className="mt-2.5 text-[12px] italic text-black/50">&ldquo;{bid.note}&rdquo;</p>
+            )}
 
             <Button className="mt-4" onClick={() => handleAccept(bid.id)}>
               Accept this bid

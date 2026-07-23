@@ -29,7 +29,7 @@ export type Rfq = {
   items: RfqItem[];
   notes?: string;
   status: RfqStatus;
-  createdVia: "manual" | "import_chat";
+  createdVia: "manual" | "import_chat" | "photo";
   deadlineMinutesFromCreation: number;
   createdAt: number;
   bidsCount: number;
@@ -53,6 +53,7 @@ export type Bid = {
   rating: number;
   reviewCount: number;
   isLeading?: boolean;
+  substitution?: { from: string; to: string };
 };
 
 export type OrderStatus =
@@ -104,5 +105,29 @@ export type SupplierRfqInboxEntry = {
   itemCount: number;
   status: "open" | "expired";
   dueInMinutes: number;
+  createdAt: number;
+};
+
+export type DisputeReason = "missing_item" | "late_delivery" | "damaged" | "wrong_item";
+export type DisputeOutcome = "refund" | "partial_refund" | "replacement";
+export type DisputeStatus = "reviewing" | "recommended" | "accepted" | "escalated";
+
+export type Dispute = {
+  orderId: string;
+  reason: DisputeReason;
+  status: DisputeStatus;
+  outcome: DisputeOutcome;
+  amount: number;
+  reasoning: string;
+  createdAt: number;
+};
+
+export type ChatQuickAction = { label: string; href: string };
+
+export type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  text: string;
+  quickActions?: ChatQuickAction[];
   createdAt: number;
 };

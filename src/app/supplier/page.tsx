@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Sprout, FileText, Package, Wallet, Send, TrendingUp } from "lucide-react";
+import { Sprout, FileText, Package, Wallet, Send, TrendingUp, Sparkles } from "lucide-react";
 import { Screen } from "@/components/chrome/Screen";
 import { TabBar } from "@/components/chrome/TabBar";
 import { GradientAICard } from "@/components/ui/GradientAICard";
@@ -10,7 +10,7 @@ import { ListRow } from "@/components/ui/ListRow";
 import { VaultCard } from "@/components/ui/VaultCard";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { useAppStore } from "@/lib/store";
-import { SUPPLIER_INBOX_SEED, SUPPLIER_PROFILE } from "@/lib/data";
+import { SUPPLIER_INBOX_SEED, SUPPLIER_PROFILE, rankSupplierInbox } from "@/lib/data";
 import { formatDueIn } from "@/lib/format";
 
 function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
@@ -29,7 +29,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
 export default function SupplierHomePage() {
   const router = useRouter();
   const { autoBid, toggleAutoBid, supplierOrders } = useAppStore();
-  const openRequests = SUPPLIER_INBOX_SEED.filter((r) => r.status === "open");
+  const rankedRequests = rankSupplierInbox(SUPPLIER_INBOX_SEED);
   const activeOrders = supplierOrders.filter((o) => o.status !== "delivered" && o.status !== "cancelled");
 
   return (
@@ -55,7 +55,9 @@ export default function SupplierHomePage() {
         name={SUPPLIER_PROFILE.shortName}
         subtext="Leafy greens demand near you may rise 18% this week — 3 shops in your coverage area are due for reorder."
         prompt="Which bids should I focus on today?"
-        onAsk={() => router.push("/supplier/inbox")}
+        onAsk={() =>
+          router.push("/supplier/assistant?q=" + encodeURIComponent("Which bids should I focus on today?"))
+        }
       />
 
       <div className="mt-5 grid grid-cols-2 gap-3">
@@ -92,16 +94,34 @@ export default function SupplierHomePage() {
           <h2 className="text-[15px] font-semibold text-app-fg">New requests</h2>
           <TrendingUp size={15} className="text-black/30" />
         </div>
-        <div className="divide-y divide-black/[0.05]">
-          {openRequests.map((r) => (
-            <ListRow
+        <div className="flex flex-col gap-2">
+          {rankedRequests.map((r) => (
+            <button
               key={r.id}
-              icon={FileText}
-              title={r.title}
-              subtitle={`${r.shopRef} · ${formatDueIn(r.dueInMinutes)}`}
-              chevron
               onClick={() => router.push(`/supplier/inbox/${r.id}`)}
-            />
+              className={`press w-full rounded-2xl border p-3 text-left ${
+                r.recommended
+                  ? "glow-gold border-gold/25 bg-gradient-to-b from-gold/[0.06] to-transparent"
+                  : "border-black/[0.06] bg-white shadow-sm"
+              }`}
+            >
+              <ListRow
+                icon={FileText}
+                title={r.title}
+                subtitle={`${r.shopRef} · ${formatDueIn(r.dueInMinutes)}`}
+                trailing={
+                  r.recommended && (
+                    <span className="inline-flex items-center gap-1 rounded-pill bg-gold px-2.5 py-1 text-[10.5px] font-bold text-white">
+                      <Sparkles size={10} />
+                      AI pick
+                    </span>
+                  )
+                }
+              />
+              {r.reason && (
+                <p className="-mt-1 pl-[52px] text-[11.5px] leading-snug text-black/50">{r.reason}</p>
+              )}
+            </button>
           ))}
         </div>
       </div>
