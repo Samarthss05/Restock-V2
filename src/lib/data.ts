@@ -49,6 +49,12 @@ export function nextId(prefix: string): string {
   idCounter += 1;
   return `${prefix}-${idCounter}`;
 }
+export function getIdCounter(): number {
+  return idCounter;
+}
+export function setIdCounter(value: number): void {
+  if (value > idCounter) idCounter = value;
+}
 
 export const VEG_RFQ_ITEMS: RfqItem[] = [
   { id: "ri-1", name: "Cavendish bananas", quantity: 20, unit: "kg" },

@@ -4,7 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -16,9 +18,12 @@ import {
   SUPPLIER_ORDERS_SEED,
   buildOrderItemsFromRfqAndBid,
   computeAiDisputeRecommendation,
+  getIdCounter,
   nextId,
+  setIdCounter,
 } from "./data";
 import { generateShopReply, generateSupplierReply } from "./assistant";
+import { loadPersisted, savePersisted } from "./persist";
 import type { Bid, ChatMessage, Dispute, DisputeReason, Order, Rfq } from "./types";
 
 type AccountPrefs = {
@@ -37,6 +42,7 @@ type Role = "shop" | "supplier" | null;
 
 type AppState = {
   role: Role;
+  hydrated: boolean;
   rfqs: Rfq[];
   bidsByRfq: Record<string, Bid[]>;
   shopOrders: Order[];
@@ -91,6 +97,63 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [disputes, setDisputes] = useState<Record<string, Dispute>>({});
   const [shopChat, setShopChat] = useState<ChatMessage[]>([]);
   const [supplierChat, setSupplierChat] = useState<ChatMessage[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const hasLoaded = useRef(false);
+
+  // Hydrate from localStorage post-mount only: the server has no localStorage, so reading it
+  // during render (e.g. a useState lazy initializer) would make the client's first render
+  // disagree with the server-rendered HTML and trigger a hydration mismatch. Doing it here,
+  // after mount, is the standard safe pattern — it intentionally sets state from an effect.
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
+    const saved = loadPersisted();
+    if (saved) {
+      if (saved.role === "shop" || saved.role === "supplier") setRoleState(saved.role);
+      if (Array.isArray(saved.rfqs)) setRfqs(saved.rfqs as Rfq[]);
+      if (saved.bidsByRfq) setBidsByRfq(saved.bidsByRfq as Record<string, Bid[]>);
+      if (Array.isArray(saved.shopOrders)) setShopOrders(saved.shopOrders as Order[]);
+      if (Array.isArray(saved.supplierOrders)) setSupplierOrders(saved.supplierOrders as Order[]);
+      if (saved.autoBid) setAutoBid(saved.autoBid as AutoBidConfig);
+      if (saved.prefs) setPrefs(saved.prefs as AccountPrefs);
+      if (saved.disputes) setDisputes(saved.disputes as Record<string, Dispute>);
+      if (Array.isArray(saved.shopChat)) setShopChat(saved.shopChat as ChatMessage[]);
+      if (Array.isArray(saved.supplierChat)) setSupplierChat(saved.supplierChat as ChatMessage[]);
+      if (typeof saved.idCounter === "number") setIdCounter(saved.idCounter);
+    }
+    setHydrated(true);
+  }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  useEffect(() => {
+    if (!hydrated) return;
+    savePersisted({
+      role,
+      rfqs,
+      bidsByRfq,
+      shopOrders,
+      supplierOrders,
+      autoBid,
+      prefs,
+      disputes,
+      shopChat,
+      supplierChat,
+      idCounter: getIdCounter(),
+    });
+  }, [
+    hydrated,
+    role,
+    rfqs,
+    bidsByRfq,
+    shopOrders,
+    supplierOrders,
+    autoBid,
+    prefs,
+    disputes,
+    shopChat,
+    supplierChat,
+  ]);
 
   const setRole = useCallback((r: Role) => setRoleState(r), []);
   const logout = useCallback(() => setRoleState(null), []);
@@ -263,6 +326,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       role,
+      hydrated,
       rfqs,
       bidsByRfq,
       shopOrders,
@@ -292,6 +356,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     }),
     [
       role,
+      hydrated,
       rfqs,
       bidsByRfq,
       shopOrders,

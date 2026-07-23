@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReStock by Ledger
 
-## Getting Started
+An interactive prototype of **ReStock by Ledger** — a B2B procurement marketplace
+where shops post requests for quotation, verified suppliers bid anonymously, and
+Ledger escrows payment end-to-end. Built with Next.js (App Router), TypeScript,
+and Tailwind CSS v4, styled as a self-contained iOS-style device frame.
 
-First, run the development server:
+## What's in here
+
+- **Shop workspace**: Home, Create RFQ (manual / AI chat-import / AI photo-scan),
+  Product Search, Live Bidding, Order Tracking (with an AI dispute co-pilot),
+  Orders, Account.
+- **Supplier workspace**: Home (AI win-likelihood ranking), RFQ Inbox, Submit Bid
+  (AI suggested pricing, AI-suggested substitutions, contact-info moderation),
+  Orders, Account.
+- A conversational **Ask ReStock AI** assistant on both sides, backed by
+  keyword-matched responses over the live in-session data (`src/lib/assistant.ts`).
+- All data is mock/in-session (see [Scope](#scope) below) and persisted to
+  `localStorage` so a refresh — or closing and reopening the tab — doesn't lose
+  your place.
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The device frame fills the
+viewport on phone-sized screens and renders as a centered mockup on wider ones.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Demo accounts** — the login screen routes by email, no password check:
+- Shop: `hello@tanjongfresh.sg` (prefilled default)
+- Supplier: `hello@goldenharvest.sg`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploying
 
-## Learn More
+This is a standard Next.js app with no environment variables, no database, and
+no external API keys — it deploys with zero configuration.
 
-To learn more about Next.js, take a look at the following resources:
+**Vercel (recommended):**
+1. Go to [vercel.com/new](https://vercel.com/new) and import
+   `samarthss05/restock-v2` from GitHub.
+2. Leave all settings on their defaults (Framework Preset: Next.js).
+3. Click **Deploy**. That's it — no environment variables to add.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Any other Next.js-compatible host (Netlify, Cloudflare Pages, a plain Node
+server via `npm run build && npm run start`) works the same way.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scope
 
-## Deploy on Vercel
+This is a design/product prototype, not a production system:
+- All data lives in React state, persisted client-side to `localStorage` —
+  there's no server, database, or multi-user sync. Clearing site data (or
+  using a different browser/device) resets it to the seed dataset.
+- Login has no real authentication — it exists to route between the Shop and
+  Supplier workspace.
+- "AI" features (chat parsing, photo-scan, pricing/dispute/ranking
+  recommendations, the assistant) are deterministic simulations (regex/rules
+  over local data), not calls to a real model or backend.
+- No real payments, escrow, or messaging integration.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See the codebase's design doc context for the full product spec this
+prototype implements.
