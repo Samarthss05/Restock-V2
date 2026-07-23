@@ -30,11 +30,11 @@ export default function LoginPage() {
       <StatusBar light />
 
       <div className="relative z-10 flex flex-col items-center px-8 pt-6">
-        <div className="ai-gradient-icon flex h-14 w-14 items-center justify-center rounded-2xl">
+        <div className="ai-icon-frost flex h-14 w-14 items-center justify-center rounded-2xl">
           <Sprout size={26} className="text-white" />
         </div>
         <div className="mt-3 text-[22px] font-bold tracking-tight">ReStock</div>
-        <div className="text-[11px] font-semibold tracking-[0.2em] text-gold-bright">BY LEDGER</div>
+        <div className="text-[11px] font-semibold tracking-[0.2em] text-sage-200">BY LEDGER</div>
 
         <h1 className="mt-8 text-center text-[27px] font-bold leading-tight tracking-tight">
           Procurement, handled calmly.

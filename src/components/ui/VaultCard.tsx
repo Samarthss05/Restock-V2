@@ -14,8 +14,8 @@ export function VaultCard({
     <div className="vault-card rounded-hero p-5">
       <div className="relative z-10 mb-3.5 flex items-center gap-2">
         {icon && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/20">
-            <ShieldCheck size={13} className="text-gold-bright" />
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15">
+            <ShieldCheck size={13} className="text-sage-200" />
           </span>
         )}
         <span className="text-[12.5px] font-bold uppercase tracking-[0.08em] text-white/70">

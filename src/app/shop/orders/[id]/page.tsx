@@ -252,8 +252,8 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
         <div className="mt-4">
           <div className="ai-gradient-surface rounded-hero p-4">
             <div className="relative z-10 mb-1.5 flex items-center gap-1.5">
-              <Sparkles size={13} className="text-gold-bright" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-bright">
+              <Sparkles size={13} className="text-sage-200" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-sage-200">
                 AI recommendation
               </span>
             </div>

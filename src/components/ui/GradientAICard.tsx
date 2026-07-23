@@ -19,13 +19,13 @@ export function GradientAICard({
   return (
     <div className="ai-gradient-surface relative overflow-hidden rounded-hero p-5">
       <div className="mb-2.5 flex items-center gap-1.5">
-        <Sparkles size={13} className="text-gold-bright" />
-        <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-gold-bright">
+        <Sparkles size={13} className="text-sage-200" />
+        <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-sage-200">
           ReStock AI
         </span>
       </div>
       <div className="text-[19px] font-bold leading-snug tracking-tight text-white">
-        {greetingPrefix} <span className="text-gold-bright">{name}</span>
+        {greetingPrefix} <span className="text-white">{name}</span>
       </div>
       <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/60">{subtext}</p>
 
@@ -33,7 +33,7 @@ export function GradientAICard({
         onClick={onAsk}
         className="press mt-5 flex w-full items-center gap-3 rounded-2xl bg-white/[0.08] p-3 text-left ring-1 ring-inset ring-white/10 backdrop-blur"
       >
-        <div className="ai-gradient-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
+        <div className="ai-icon-frost flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
           <Sparkles size={16} className="text-white" />
         </div>
         <div className="min-w-0 flex-1">
