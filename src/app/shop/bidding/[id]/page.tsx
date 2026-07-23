@@ -89,12 +89,14 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {aiPick && (
-        <div className="ai-gradient-surface mt-4 rounded-card border border-black/[0.04] p-4">
-          <div className="mb-1.5 flex items-center gap-1.5">
-            <Sparkles size={13} className="text-gold" />
-            <span className="ai-gradient-text text-[11px] font-bold uppercase tracking-wide">AI pick</span>
+        <div className="ai-gradient-surface mt-4 rounded-hero p-4">
+          <div className="relative z-10 mb-1.5 flex items-center gap-1.5">
+            <Sparkles size={13} className="text-gold-bright" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-bright">
+              AI pick
+            </span>
           </div>
-          <p className="text-[13.5px] leading-relaxed text-app-fg">{aiPick}</p>
+          <p className="relative z-10 text-[13.5px] leading-relaxed text-white/80">{aiPick}</p>
         </div>
       )}
 
@@ -115,30 +117,38 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
         {bids.map((bid, i) => (
           <Card
             key={bid.id}
-            className={bid.isLeading ? "border-gold/40 bg-gold/[0.04]" : undefined}
+            className={
+              bid.isLeading
+                ? "glow-gold border-gold/25 bg-gradient-to-b from-gold/[0.06] to-transparent"
+                : undefined
+            }
           >
             <div className="flex items-start justify-between">
-              <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black/[0.06] text-[12px] font-bold text-app-fg">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold ${
+                    bid.isLeading ? "bg-gold text-white" : "bg-black/[0.06] text-app-fg"
+                  }`}
+                >
                   {i + 1}
                 </span>
                 <div>
-                  <div className="text-[14.5px] font-semibold text-app-fg">{bid.supplierLabel}</div>
+                  <div className="text-[14.5px] font-bold text-app-fg">{bid.supplierLabel}</div>
                   <StarRating rating={bid.rating} reviewCount={bid.reviewCount} />
                 </div>
               </div>
               {bid.isLeading && (
-                <span className="rounded-pill bg-gold/15 px-2.5 py-1 text-[11px] font-semibold text-gold">
+                <span className="rounded-pill bg-gold px-2.5 py-1 text-[11px] font-bold text-white shadow-[0_4px_10px_-4px_rgba(212,160,23,0.7)]">
                   Leading bid
                 </span>
               )}
             </div>
 
-            <div className="mt-3 flex items-end justify-between">
-              <div className="text-[22px] font-semibold tabular-nums text-app-fg">
+            <div className="mt-3.5 flex items-end justify-between">
+              <div className="text-[26px] font-bold tabular-nums tracking-tight text-app-fg">
                 {formatSGD(bid.total)}
               </div>
-              <div className="text-right text-[12px] text-black/50">
+              <div className="text-right text-[12px] font-medium text-black/50">
                 <div className="flex items-center justify-end gap-1">
                   <Zap size={12} /> {bid.fillRate}% fill
                 </div>
@@ -149,11 +159,11 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
             </div>
 
             {bid.tags.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
                 {bid.tags.slice(0, 2).map((tag) => (
                   <span
                     key={tag}
-                    className="flex items-center gap-1 rounded-pill bg-sage-muted px-2 py-0.5 text-[11px] font-medium text-sage-dark"
+                    className="flex items-center gap-1 rounded-pill bg-sage-muted px-2 py-0.5 text-[11px] font-semibold text-sage-dark"
                   >
                     <TagIcon size={10} /> {tag}
                   </span>
@@ -161,9 +171,9 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
               </div>
             )}
 
-            {bid.note && <p className="mt-2 text-[12px] italic text-black/50">&ldquo;{bid.note}&rdquo;</p>}
+            {bid.note && <p className="mt-2.5 text-[12px] italic text-black/50">&ldquo;{bid.note}&rdquo;</p>}
 
-            <Button className="mt-3" onClick={() => handleAccept(bid.id)}>
+            <Button className="mt-4" onClick={() => handleAccept(bid.id)}>
               Accept this bid
             </Button>
           </Card>
@@ -188,7 +198,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
               onChange={(e) => setFeedback(e.target.value)}
               rows={3}
               placeholder="Optional feedback for better matching next time…"
-              className="w-full rounded-2xl border border-black/10 bg-white p-3 text-[13.5px] outline-none focus:border-sage"
+              className="w-full rounded-2xl border border-black/10 bg-white shadow-sm p-3 text-[13.5px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
             />
             <div className="mt-2 flex gap-2">
               <Button variant="secondary" onClick={() => setRejecting(false)}>

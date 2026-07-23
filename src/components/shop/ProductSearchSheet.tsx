@@ -110,7 +110,7 @@ export function ProductSearchSheet(props: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products, e.g. bananas"
-            className="w-full rounded-2xl border border-black/10 bg-white py-3 pl-10 pr-4 text-[15px] outline-none focus:border-sage"
+            className="w-full rounded-2xl border border-black/10 bg-white shadow-sm py-3 pl-10 pr-4 text-[15px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
           />
         </div>
 
@@ -192,13 +192,13 @@ export function ProductSearchSheet(props: Props) {
                   }}
                   placeholder="Item name"
                   className={`flex-1 rounded-2xl border bg-white px-3.5 py-2.5 text-[14px] outline-none ${
-                    customError ? "border-destructive" : "border-black/10 focus:border-sage"
+                    customError ? "border-destructive" : "border-black/10 focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
                   }`}
                 />
                 <select
                   value={customUnit}
                   onChange={(e) => setCustomUnit(e.target.value as Unit)}
-                  className="rounded-2xl border border-black/10 bg-white px-2 py-2.5 text-[13px] outline-none"
+                  className="rounded-2xl border border-black/10 bg-white shadow-sm px-2 py-2.5 text-[13px] outline-none"
                 >
                   {(["pcs", "kg", "carton", "pack", "bag", "bottle"] as Unit[]).map((u) => (
                     <option key={u} value={u}>

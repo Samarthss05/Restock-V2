@@ -26,25 +26,25 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex h-full flex-col bg-gradient-to-b from-[#1f3327] to-[#14241b] text-white">
+    <div className="vault-card relative flex h-full flex-col text-white">
       <StatusBar light />
 
-      <div className="flex flex-col items-center px-8 pt-6">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
-          <Sprout size={26} className="text-sage-200" />
+      <div className="relative z-10 flex flex-col items-center px-8 pt-6">
+        <div className="ai-gradient-icon flex h-14 w-14 items-center justify-center rounded-2xl">
+          <Sprout size={26} className="text-white" />
         </div>
         <div className="mt-3 text-[22px] font-bold tracking-tight">ReStock</div>
-        <div className="text-[11px] font-semibold tracking-[0.2em] text-sage-200">BY LEDGER</div>
+        <div className="text-[11px] font-semibold tracking-[0.2em] text-gold-bright">BY LEDGER</div>
 
-        <h1 className="mt-8 text-center text-[26px] font-semibold leading-tight">
+        <h1 className="mt-8 text-center text-[27px] font-bold leading-tight tracking-tight">
           Procurement, handled calmly.
         </h1>
-        <p className="mt-3 max-w-[280px] text-center text-[14px] leading-relaxed text-white/60">
+        <p className="mt-3 max-w-[280px] text-center text-[14px] leading-relaxed text-white/55">
           Log in once — we&apos;ll open the right workspace for your account.
         </p>
       </div>
 
-      <div className="mt-auto flex-1 rounded-t-[2rem] bg-app-bg px-5 pb-4 pt-6 text-app-fg">
+      <div className="relative z-10 mt-auto flex-1 rounded-t-[2rem] bg-app-bg px-5 pb-4 pt-6 text-app-fg shadow-[0_-20px_50px_-10px_rgba(0,0,0,0.35)]">
         <div className="flex flex-col gap-3">
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-black/50">Email</span>
@@ -52,7 +52,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
-              className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-[15px] outline-none focus:border-sage"
+              className="rounded-2xl border border-black/10 bg-white shadow-sm px-4 py-3 text-[15px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
             />
           </label>
           <label className="flex flex-col gap-1.5">
@@ -64,7 +64,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
-              className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-[15px] outline-none focus:border-sage"
+              className="rounded-2xl border border-black/10 bg-white shadow-sm px-4 py-3 text-[15px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
             />
           </label>
 

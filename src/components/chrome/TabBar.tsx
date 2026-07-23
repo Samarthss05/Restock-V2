@@ -30,7 +30,7 @@ export function TabBar({ variant }: { variant: "shop" | "supplier" }) {
   const tabs = variant === "shop" ? SHOP_TABS : SUPPLIER_TABS;
 
   return (
-    <div className="sticky bottom-0 z-20 flex items-stretch justify-around border-t border-black/[0.06] bg-white/85 pb-1 pt-2 backdrop-blur-md">
+    <div className="sticky bottom-0 z-20 flex items-stretch justify-around border-t border-black/[0.06] bg-white/85 px-2 pb-1 pt-2 backdrop-blur-xl">
       {tabs.map((tab) => {
         const active = pathname === tab.href;
         const Icon = tab.icon;
@@ -38,12 +38,16 @@ export function TabBar({ variant }: { variant: "shop" | "supplier" }) {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`flex flex-1 flex-col items-center gap-1 py-1 text-[10px] font-medium ${
-              active ? "text-sage" : "text-black/35"
-            }`}
+            className="press flex flex-1 flex-col items-center gap-1 py-1 text-[10px] font-semibold"
           >
-            <Icon size={22} strokeWidth={active ? 2.4 : 1.8} />
-            {tab.label}
+            <span
+              className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                active ? "bg-sage-dark text-white" : "text-black/35"
+              }`}
+            >
+              <Icon size={19} strokeWidth={active ? 2.3 : 1.8} />
+            </span>
+            <span className={active ? "text-sage-dark" : "text-black/35"}>{tab.label}</span>
           </Link>
         );
       })}

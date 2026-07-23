@@ -131,7 +131,7 @@ function CreateRfqInner() {
           <input
             value={deliveryAddress}
             onChange={(e) => setDeliveryAddress(e.target.value)}
-            className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-[14.5px] outline-none focus:border-sage"
+            className="rounded-2xl border border-black/10 bg-white shadow-sm px-4 py-3 text-[14.5px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
           />
         </label>
         <label className="flex flex-col gap-1.5">
@@ -139,7 +139,7 @@ function CreateRfqInner() {
           <input
             value={neededBy}
             onChange={(e) => setNeededBy(e.target.value)}
-            className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-[14.5px] outline-none focus:border-sage"
+            className="rounded-2xl border border-black/10 bg-white shadow-sm px-4 py-3 text-[14.5px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
           />
         </label>
       </div>
@@ -180,7 +180,7 @@ function CreateRfqInner() {
             onChange={(e) => setImportText(e.target.value)}
             placeholder="Paste it just like you'd send it, e.g. 'Need 20kg bananas, 15 ctn eggs, 10kg kailan'"
             rows={4}
-            className="w-full rounded-2xl border border-black/10 bg-white p-4 text-[14.5px] outline-none focus:border-sage"
+            className="w-full rounded-2xl border border-black/10 bg-white shadow-sm p-4 text-[14.5px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
           />
           <button
             onClick={handleParse}
@@ -231,7 +231,7 @@ function CreateRfqInner() {
             rows={3}
             placeholder="Delivery instructions…"
             className={`w-full rounded-2xl border bg-white p-4 text-[14.5px] outline-none ${
-              notesCheck.flagged ? "border-destructive" : "border-black/10 focus:border-sage"
+              notesCheck.flagged ? "border-destructive" : "border-black/10 focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
             }`}
           />
         </label>

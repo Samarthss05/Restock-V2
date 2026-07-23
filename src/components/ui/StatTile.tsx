@@ -12,18 +12,22 @@ export function StatTile({
   tint?: "sage" | "gold" | "destructive" | "slate";
 }) {
   const tintStyles: Record<string, string> = {
-    sage: "bg-sage-100 text-sage-dark",
-    gold: "bg-gold/15 text-gold",
-    destructive: "bg-destructive/10 text-destructive",
-    slate: "bg-black/[0.05] text-black/60",
+    sage: "bg-gradient-to-br from-sage-dark to-sage text-white",
+    gold: "bg-gradient-to-br from-gold-bright to-gold text-white",
+    destructive: "bg-gradient-to-br from-destructive to-[#a84545] text-white",
+    slate: "bg-black/[0.06] text-black/60",
   };
   return (
-    <div className="rounded-card border border-black/[0.05] bg-white p-3.5">
-      <div className={`mb-2 flex h-8 w-8 items-center justify-center rounded-full ${tintStyles[tint]}`}>
-        <Icon size={16} strokeWidth={2.2} />
+    <div className="card-shadow rounded-card border border-black/[0.04] bg-white p-4">
+      <div
+        className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl ${tintStyles[tint]}`}
+      >
+        <Icon size={16} strokeWidth={2.3} />
       </div>
-      <div className="text-[20px] font-semibold tabular-nums leading-tight text-app-fg">{value}</div>
-      <div className="text-[12px] text-black/50">{label}</div>
+      <div className="text-[22px] font-bold tabular-nums leading-none tracking-tight text-app-fg">
+        {value}
+      </div>
+      <div className="mt-1.5 text-[12px] text-black/45">{label}</div>
     </div>
   );
 }

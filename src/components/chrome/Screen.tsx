@@ -22,7 +22,7 @@ export function Screen({
       <StatusBar light={statusBarLight} />
       <div className="relative flex-1 overflow-y-auto no-scrollbar">
         {topBar}
-        <div className={noPadding ? "" : "px-4 pb-10 pt-4"}>{children}</div>
+        <div className={noPadding ? "" : "px-5 pb-10 pt-4"}>{children}</div>
         {bottomBar}
       </div>
       <HomeIndicator light={homeIndicatorLight} />

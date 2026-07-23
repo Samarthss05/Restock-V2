@@ -20,25 +20,29 @@ export function ListRow({
   onClick?: () => void;
 }) {
   const tintStyles: Record<string, string> = {
-    sage: "bg-sage-100 text-sage-dark",
-    gold: "bg-gold/15 text-gold",
-    destructive: "bg-destructive/10 text-destructive",
-    slate: "bg-black/[0.05] text-black/60",
+    sage: "bg-gradient-to-br from-sage-dark to-sage text-white",
+    gold: "bg-gradient-to-br from-gold-bright to-gold text-white",
+    destructive: "bg-gradient-to-br from-destructive to-[#a84545] text-white",
+    slate: "bg-black/[0.06] text-black/55",
   };
   const Comp = onClick ? "button" : "div";
   return (
     <Comp
       onClick={onClick}
-      className={`flex w-full items-center gap-3 py-3 text-left ${onClick ? "active:opacity-60" : ""}`}
+      className={`press flex w-full items-center gap-3 rounded-2xl py-3 text-left ${
+        onClick ? "active:bg-black/[0.02]" : ""
+      }`}
     >
       {Icon && (
-        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${tintStyles[iconTint]}`}>
-          <Icon size={18} strokeWidth={2} />
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-sm ${tintStyles[iconTint]}`}
+        >
+          <Icon size={17} strokeWidth={2} />
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[14.5px] font-medium text-app-fg">{title}</div>
-        {subtitle && <div className="truncate text-[12.5px] text-black/50">{subtitle}</div>}
+        <div className="truncate text-[14.5px] font-semibold text-app-fg">{title}</div>
+        {subtitle && <div className="truncate text-[12.5px] text-black/45">{subtitle}</div>}
       </div>
       {trailing && <div className="shrink-0 text-right">{trailing}</div>}
       {chevron && <ChevronRight size={16} className="shrink-0 text-black/25" />}

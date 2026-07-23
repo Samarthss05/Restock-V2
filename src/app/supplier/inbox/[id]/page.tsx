@@ -138,20 +138,20 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
         </div>
       )}
 
-      <div className="ai-gradient-surface mt-4 rounded-card border border-black/[0.04] p-4">
-        <div className="mb-1.5 flex items-center gap-1.5">
-          <Sparkles size={13} className="text-gold" />
-          <span className="ai-gradient-text text-[11px] font-bold uppercase tracking-wide">
+      <div className="ai-gradient-surface mt-4 rounded-hero p-4">
+        <div className="relative z-10 mb-1.5 flex items-center gap-1.5">
+          <Sparkles size={13} className="text-gold-bright" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-bright">
             AI suggested pricing
           </span>
         </div>
-        <p className="text-[13px] leading-relaxed text-app-fg">
+        <p className="relative z-10 text-[13px] leading-relaxed text-white/80">
           Based on market rates and your 92% acceptance history, pricing ~5% below your usual
           would likely move you into 1st place without hurting margin.
         </p>
         <button
           onClick={applySuggestion}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-sage-dark py-3 text-[14px] font-semibold text-white active:scale-[0.98]"
+          className="press relative z-10 mt-3 flex w-full items-center justify-center gap-2 rounded-pill bg-white text-sage-deep py-3 text-[14px] font-bold shadow-[0_10px_20px_-8px_rgba(0,0,0,0.4)]"
         >
           Apply suggestion — {formatSGD(suggestedTotal)}
         </button>
@@ -177,7 +177,7 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
                     disabled={it.unavailable}
                     value={it.price}
                     onChange={(e) => updatePrice(it.id, parseFloat(e.target.value) || 0)}
-                    className="w-20 rounded-xl border border-black/10 bg-white px-2 py-1.5 text-right text-[14px] tabular-nums outline-none focus:border-sage disabled:bg-black/[0.03]"
+                    className="w-20 rounded-xl border border-black/10 bg-white shadow-sm px-2 py-1.5 text-right text-[14px] tabular-nums outline-none focus:border-sage disabled:bg-black/[0.03]"
                   />
                 </div>
               </div>
@@ -193,9 +193,9 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
             </Card>
           ))}
         </div>
-        <div className="mt-3 flex items-center justify-between rounded-2xl bg-black/[0.04] px-4 py-3">
-          <span className="text-[13.5px] font-semibold text-app-fg">Your bid total</span>
-          <span className="text-[18px] font-semibold tabular-nums text-app-fg">
+        <div className="mt-3 flex items-center justify-between rounded-2xl bg-sage-deep px-4 py-3.5 shadow-[var(--shadow-vault)]">
+          <span className="text-[13px] font-semibold text-white/70">Your bid total</span>
+          <span className="text-[20px] font-bold tabular-nums tracking-tight text-white">
             {formatSGD(bidTotal)}
           </span>
         </div>
@@ -206,7 +206,7 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
         <input
           value={deliveryWhen}
           onChange={(e) => setDeliveryWhen(e.target.value)}
-          className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-[14.5px] outline-none focus:border-sage"
+          className="rounded-2xl border border-black/10 bg-white shadow-sm px-4 py-3 text-[14.5px] outline-none focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
         />
       </div>
 
@@ -218,7 +218,7 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
             onChange={(e) => setNote(e.target.value)}
             rows={2}
             className={`w-full rounded-2xl border bg-white p-4 text-[14.5px] outline-none ${
-              noteCheck.flagged ? "border-destructive" : "border-black/10 focus:border-sage"
+              noteCheck.flagged ? "border-destructive" : "border-black/10 focus:border-sage focus:ring-4 focus:ring-sage/10 transition-shadow"
             }`}
           />
         </label>

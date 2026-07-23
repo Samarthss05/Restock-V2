@@ -19,21 +19,23 @@ export function TopNavBar({
 }) {
   const router = useRouter();
   return (
-    <div className="sticky top-0 z-20 flex h-12 items-center justify-between border-b border-black/[0.06] bg-[var(--color-app-bg)]/80 px-2 backdrop-blur-md">
+    <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-app-bg/75 px-3 shadow-[0_1px_0_rgba(0,0,0,0.05)] backdrop-blur-xl">
       <button
         onClick={() => (onBack ? onBack() : router.back())}
-        className="flex min-w-[64px] items-center gap-0.5 px-2 py-2 text-[15px] text-sage active:opacity-60"
+        className="press flex min-w-[64px] items-center gap-1 py-2 text-[14px] font-semibold text-sage-dark"
       >
-        <ChevronLeft size={20} strokeWidth={2.5} className="-ml-1" />
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black/[0.05]">
+          <ChevronLeft size={16} strokeWidth={2.8} />
+        </span>
         {backLabel}
       </button>
-      <div className="absolute left-1/2 -translate-x-1/2 text-[15px] font-semibold text-app-fg">
+      <div className="absolute left-1/2 -translate-x-1/2 text-[15px] font-bold tracking-tight text-app-fg">
         {title}
       </div>
       <button
         onClick={rightAction}
         disabled={!rightAction}
-        className="min-w-[64px] px-2 py-2 text-right text-[15px] font-medium text-sage disabled:opacity-0"
+        className="press min-w-[64px] px-2 py-2 text-right text-[14px] font-semibold text-sage-dark disabled:opacity-0"
       >
         {rightLabel}
       </button>
