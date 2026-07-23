@@ -182,7 +182,7 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
                     {it.quantity} {it.unit} · AI suggests {formatSGD(it.aiSuggestedPrice)}
                   </div>
                   {it.substitutedFrom && (
-                    <div className="mt-1 inline-flex items-center gap-1 rounded-pill bg-gold/15 px-2 py-0.5 text-[10.5px] font-semibold text-[#8a6208]">
+                    <div className="mt-1 inline-flex items-center gap-1 rounded-pill bg-gold/15 px-2 py-0.5 text-[10.5px] font-semibold text-[#1D4ED8]">
                       <Repeat size={10} />
                       Substituted from {it.substitutedFrom}
                     </div>
