@@ -138,7 +138,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
                 </div>
               </div>
               {bid.isLeading && (
-                <span className="grad-gold rounded-pill px-2.5 py-1 text-[11px] font-bold text-white shadow-[0_4px_10px_-4px_rgba(47,111,237,0.7)]">
+                <span className="grad-gold rounded-pill px-2.5 py-1 text-[11px] font-bold text-white shadow-[0_4px_10px_-4px_rgba(36,64,107,0.7)]">
                   Leading bid
                 </span>
               )}
@@ -172,7 +172,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
             )}
 
             {bid.substitution ? (
-              <div className="mt-2.5 flex items-center gap-1.5 rounded-xl bg-gold/10 px-2.5 py-2 text-[11.5px] font-medium text-[#1D4ED8]">
+              <div className="mt-2.5 flex items-center gap-1.5 rounded-xl bg-gold/10 px-2.5 py-2 text-[11.5px] font-medium text-[#24406B]">
                 <Repeat size={12} className="shrink-0" />
                 AI-matched substitute: {bid.substitution.from} → {bid.substitution.to}
               </div>

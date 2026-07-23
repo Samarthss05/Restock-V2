@@ -1,13 +1,13 @@
 const STATUS_STYLES: Record<string, string> = {
   open: "bg-gradient-to-r from-sage-100 to-sage-100/50 text-sage-dark",
-  awaiting_response: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#1D4ED8]",
+  awaiting_response: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#24406B]",
   draft: "bg-black/[0.06] text-black/50",
   confirmed: "bg-gradient-to-r from-sage-100 to-sage-100/50 text-sage-dark",
-  in_transit: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#1D4ED8]",
+  in_transit: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#24406B]",
   delivered: "bg-gradient-to-r from-sage-100 to-sage-100/50 text-sage-dark",
   cancelled: "bg-gradient-to-r from-destructive/15 to-destructive/[0.06] text-destructive",
   expired: "bg-gradient-to-r from-destructive/15 to-destructive/[0.06] text-destructive",
-  leading: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#1D4ED8]",
+  leading: "bg-gradient-to-r from-gold/20 to-gold/[0.08] text-[#24406B]",
 };
 
 const STATUS_LABELS: Record<string, string> = {
