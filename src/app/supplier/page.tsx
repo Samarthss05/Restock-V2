@@ -17,7 +17,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className={`flex h-6 w-10 items-center rounded-full p-0.5 transition ${on ? "bg-sage-dark" : "bg-black/15"}`}
+      className={`flex h-6 w-10 items-center rounded-full p-0.5 transition ${on ? "grad-sage" : "bg-black/15"}`}
     >
       <span
         className={`h-5 w-5 rounded-full bg-white shadow transition ${on ? "translate-x-4" : "translate-x-0"}`}
@@ -36,14 +36,14 @@ export default function SupplierHomePage() {
     <Screen bottomBar={<TabBar variant="supplier" />}>
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sage-dark">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl grad-sage">
             <Sprout size={16} className="text-white" />
           </div>
           <span className="text-[15px] font-bold tracking-tight text-app-fg">ReStock</span>
         </div>
         <button
           onClick={() => router.push("/supplier/account")}
-          className="relative flex h-9 w-9 items-center justify-center rounded-full bg-[#1f2a24] text-white active:opacity-70"
+          className="relative flex h-9 w-9 items-center justify-center rounded-full grad-avatar shadow-sm text-white active:opacity-70"
         >
           <span className="text-[13px] font-semibold">GH</span>
           <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-gold ring-2 ring-app-bg" />
@@ -111,7 +111,7 @@ export default function SupplierHomePage() {
                 subtitle={`${r.shopRef} · ${formatDueIn(r.dueInMinutes)}`}
                 trailing={
                   r.recommended && (
-                    <span className="inline-flex items-center gap-1 rounded-pill bg-gold px-2.5 py-1 text-[10.5px] font-bold text-white">
+                    <span className="grad-gold inline-flex items-center gap-1 rounded-pill px-2.5 py-1 text-[10.5px] font-bold text-white">
                       <Sparkles size={10} />
                       AI pick
                     </span>

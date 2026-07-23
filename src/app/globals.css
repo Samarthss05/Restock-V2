@@ -57,7 +57,11 @@ body {
 }
 
 body {
-  background: radial-gradient(120% 100% at 50% 0%, #eef1ec 0%, #dfe3dc 55%, #cfd5cc 100%);
+  background:
+    radial-gradient(70% 55% at 12% 0%, rgba(212, 160, 23, 0.16) 0%, rgba(212, 160, 23, 0) 60%),
+    radial-gradient(75% 60% at 100% 8%, rgba(55, 93, 73, 0.28) 0%, rgba(55, 93, 73, 0) 60%),
+    radial-gradient(90% 80% at 50% 100%, rgba(31, 51, 39, 0.14) 0%, rgba(31, 51, 39, 0) 55%),
+    radial-gradient(120% 100% at 50% 0%, #eef1ec 0%, #dfe3dc 55%, #cfd5cc 100%);
   color: var(--color-app-fg);
   font-family: var(--font-app-sans);
   -webkit-font-smoothing: antialiased;
@@ -184,4 +188,44 @@ body {
   border-radius: 999px;
   filter: blur(40px);
   pointer-events: none;
+}
+
+/* Gradient primary surfaces: buttons, avatars, active nav/tab states */
+.grad-sage {
+  background: linear-gradient(155deg, #4c7059 0%, #375d49 55%, #23402f 100%);
+}
+
+.grad-sage-glossy {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(155deg, #4c7059 0%, #375d49 55%, #23402f 100%);
+}
+
+.grad-gold {
+  background: linear-gradient(135deg, #f0b429 0%, #d4a017 55%, #a97a0f 100%);
+}
+
+.grad-destructive {
+  background: linear-gradient(155deg, #d47575 0%, #c65a5a 55%, #a03f3f 100%);
+}
+
+.grad-avatar {
+  background: linear-gradient(155deg, #35503f 0%, #1f3327 100%);
+}
+
+/* Soft light-gradient wash for secondary featured cards (non-dark) */
+.card-soft-sage {
+  background: linear-gradient(160deg, #ffffff 0%, #eef4f0 100%);
+}
+
+.card-soft-gold {
+  background: linear-gradient(160deg, #ffffff 0%, #fbf1dc 100%);
+}
+
+.card-soft-destructive {
+  background: linear-gradient(160deg, #ffffff 0%, #fbeded 100%);
+}
+
+.progress-grad {
+  background: linear-gradient(90deg, #f0b429 0%, #d4a017 100%);
 }

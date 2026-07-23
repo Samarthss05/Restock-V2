@@ -75,7 +75,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
 
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-black/[0.06]">
         <div
-          className="h-full rounded-full bg-gold transition-all duration-1000"
+          className="progress-grad h-full rounded-full transition-all duration-1000"
           style={{ width: `${progressPct}%` }}
         />
       </div>
@@ -127,7 +127,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
               <div className="flex items-center gap-2.5">
                 <span
                   className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold ${
-                    bid.isLeading ? "bg-gold text-white" : "bg-black/[0.06] text-app-fg"
+                    bid.isLeading ? "grad-gold text-white" : "bg-black/[0.06] text-app-fg"
                   }`}
                 >
                   {i + 1}
@@ -138,7 +138,7 @@ export default function LiveBiddingPage({ params }: { params: Promise<{ id: stri
                 </div>
               </div>
               {bid.isLeading && (
-                <span className="rounded-pill bg-gold px-2.5 py-1 text-[11px] font-bold text-white shadow-[0_4px_10px_-4px_rgba(212,160,23,0.7)]">
+                <span className="grad-gold rounded-pill px-2.5 py-1 text-[11px] font-bold text-white shadow-[0_4px_10px_-4px_rgba(212,160,23,0.7)]">
                   Leading bid
                 </span>
               )}

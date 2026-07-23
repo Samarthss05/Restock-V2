@@ -12,15 +12,21 @@ export function StatTile({
   tint?: "sage" | "gold" | "destructive" | "slate";
 }) {
   const tintStyles: Record<string, string> = {
-    sage: "bg-gradient-to-br from-sage-dark to-sage text-white",
-    gold: "bg-gradient-to-br from-gold-bright to-gold text-white",
-    destructive: "bg-gradient-to-br from-destructive to-[#a84545] text-white",
+    sage: "grad-sage text-white",
+    gold: "grad-gold text-white",
+    destructive: "grad-destructive text-white",
     slate: "bg-black/[0.06] text-black/60",
   };
+  const cardStyles: Record<string, string> = {
+    sage: "card-soft-sage",
+    gold: "card-soft-gold",
+    destructive: "card-soft-destructive",
+    slate: "bg-white",
+  };
   return (
-    <div className="card-shadow rounded-card border border-black/[0.04] bg-white p-4">
+    <div className={`card-shadow rounded-card border border-black/[0.04] p-4 ${cardStyles[tint]}`}>
       <div
-        className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl ${tintStyles[tint]}`}
+        className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl shadow-sm ${tintStyles[tint]}`}
       >
         <Icon size={16} strokeWidth={2.3} />
       </div>

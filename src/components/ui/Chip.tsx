@@ -14,7 +14,7 @@ export function Chip({
       onClick={onClick}
       className={`press whitespace-nowrap rounded-pill border px-3.5 py-2 text-[13px] font-semibold transition-colors ${
         active
-          ? "border-sage-dark bg-sage-dark text-white shadow-[var(--shadow-button)]"
+          ? "grad-sage border-sage-dark text-white shadow-[var(--shadow-button)]"
           : "border-black/[0.07] bg-white text-app-fg"
       }`}
     >

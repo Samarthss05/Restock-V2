@@ -60,7 +60,7 @@ export function AssistantChat({
             onClick={() => handleSend(input)}
             disabled={!input.trim()}
             aria-label="Send"
-            className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sage-dark text-white shadow-[var(--shadow-button)] disabled:opacity-40"
+            className="press grad-sage-glossy flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-[var(--shadow-button)] disabled:opacity-40"
           >
             <ArrowUp size={18} />
           </button>
@@ -92,7 +92,7 @@ export function AssistantChat({
           {messages.map((m) =>
             m.role === "user" ? (
               <div key={m.id} className="flex justify-end">
-                <div className="max-w-[80%] rounded-2xl rounded-br-md bg-sage-dark px-4 py-2.5 text-[13.5px] text-white shadow-[var(--shadow-button)]">
+                <div className="grad-sage-glossy max-w-[80%] rounded-2xl rounded-br-md px-4 py-2.5 text-[13.5px] text-white shadow-[var(--shadow-button)]">
                   {m.text}
                 </div>
               </div>

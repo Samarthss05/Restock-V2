@@ -42,7 +42,7 @@ export function TabBar({ variant }: { variant: "shop" | "supplier" }) {
           >
             <span
               className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                active ? "bg-sage-dark text-white" : "text-black/35"
+                active ? "grad-sage text-white shadow-[0_4px_10px_-4px_rgba(31,51,39,0.6)]" : "text-black/35"
               }`}
             >
               <Icon size={19} strokeWidth={active ? 2.3 : 1.8} />

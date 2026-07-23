@@ -82,7 +82,7 @@ export default function SupplierOrderDetailPage({ params }: { params: Promise<{ 
                 <div className="flex items-center gap-3">
                   <div
                     className={`flex h-7 w-7 items-center justify-center rounded-full ${
-                      isDone || isCurrent ? "bg-sage-dark text-white" : "bg-black/[0.08] text-black/30"
+                      isDone || isCurrent ? "grad-sage text-white" : "bg-black/[0.08] text-black/30"
                     }`}
                   >
                     {isDone ? <Check size={14} /> : <span className="text-[12px] font-semibold">{i + 1}</span>}
@@ -90,7 +90,7 @@ export default function SupplierOrderDetailPage({ params }: { params: Promise<{ 
                   <span className="text-[14.5px] font-medium text-app-fg">{label}</span>
                 </div>
                 {isCurrent && (
-                  <span className="rounded-pill bg-sage-dark px-2.5 py-1 text-[11px] font-semibold text-white">
+                  <span className="grad-sage rounded-pill px-2.5 py-1 text-[11px] font-semibold text-white">
                     Current
                   </span>
                 )}

@@ -6,7 +6,7 @@ export function FulfillmentBar({ step }: { step: number }) {
       {FULFILLMENT_STEPS.map((_, i) => (
         <div
           key={i}
-          className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-sage-dark" : "bg-black/[0.08]"}`}
+          className={`h-1.5 flex-1 rounded-full ${i <= step ? "grad-sage" : "bg-black/[0.08]"}`}
         />
       ))}
     </div>

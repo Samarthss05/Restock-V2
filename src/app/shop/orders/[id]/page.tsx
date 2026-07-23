@@ -98,7 +98,7 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
                 <div className="flex flex-col items-center">
                   <div
                     className={`flex h-6 w-6 items-center justify-center rounded-full ${
-                      done ? "bg-sage-dark text-white" : "bg-black/[0.08] text-black/30"
+                      done ? "grad-sage text-white" : "bg-black/[0.08] text-black/30"
                     }`}
                   >
                     {done ? <Check size={13} /> : <span className="h-1.5 w-1.5 rounded-full bg-current" />}

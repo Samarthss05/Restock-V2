@@ -20,9 +20,9 @@ export function ListRow({
   onClick?: () => void;
 }) {
   const tintStyles: Record<string, string> = {
-    sage: "bg-gradient-to-br from-sage-dark to-sage text-white",
-    gold: "bg-gradient-to-br from-gold-bright to-gold text-white",
-    destructive: "bg-gradient-to-br from-destructive to-[#a84545] text-white",
+    sage: "grad-sage text-white",
+    gold: "grad-gold text-white",
+    destructive: "grad-destructive text-white",
     slate: "bg-black/[0.06] text-black/55",
   };
   const Comp = onClick ? "button" : "div";

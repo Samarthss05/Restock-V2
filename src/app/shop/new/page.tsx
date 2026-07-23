@@ -215,7 +215,7 @@ function CreateRfqInner() {
           <button
             onClick={handleParse}
             disabled={!importText.trim()}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-sage-dark py-3 text-[14px] font-semibold text-white active:scale-[0.98] disabled:opacity-40"
+            className="grad-sage-glossy mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-button)] active:scale-[0.98] disabled:opacity-40"
           >
             <Sparkles size={15} />
             Parse with AI

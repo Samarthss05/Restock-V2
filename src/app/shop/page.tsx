@@ -22,14 +22,14 @@ export default function ShopHomePage() {
     <Screen bottomBar={<TabBar variant="shop" />}>
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sage-dark">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl grad-sage">
             <Sprout size={16} className="text-white" />
           </div>
           <span className="text-[15px] font-bold tracking-tight text-app-fg">ReStock</span>
         </div>
         <button
           onClick={() => router.push("/shop/account")}
-          className="relative flex h-9 w-9 items-center justify-center rounded-full bg-[#1f2a24] text-white active:opacity-70"
+          className="relative flex h-9 w-9 items-center justify-center rounded-full grad-avatar shadow-sm text-white active:opacity-70"
         >
           <span className="text-[13px] font-semibold">TF</span>
           <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-gold ring-2 ring-app-bg" />

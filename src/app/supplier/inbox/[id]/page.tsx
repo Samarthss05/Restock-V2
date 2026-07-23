@@ -219,7 +219,7 @@ export default function SubmitBidPage({ params }: { params: Promise<{ id: string
                   </div>
                   <button
                     onClick={() => acceptSubstitute(it.id)}
-                    className="press shrink-0 rounded-pill bg-sage-dark px-2.5 py-1.5 text-[11px] font-bold text-white"
+                    className="press grad-sage shrink-0 rounded-pill px-2.5 py-1.5 text-[11px] font-bold text-white"
                   >
                     Swap
                   </button>

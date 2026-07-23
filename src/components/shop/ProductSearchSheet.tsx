@@ -156,7 +156,7 @@ export function ProductSearchSheet(props: Props) {
                 {props.mode === "add" && (
                   <div
                     className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
-                      isSelected ? "border-sage-dark bg-sage-dark" : "border-black/15"
+                      isSelected ? "grad-sage border-sage-dark" : "border-black/15"
                     }`}
                   >
                     {isSelected && <Check size={13} className="text-white" />}
